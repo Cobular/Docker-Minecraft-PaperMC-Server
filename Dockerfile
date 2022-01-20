@@ -1,7 +1,7 @@
 ########################################################
 ############## We use a java base image ################
 ########################################################
-FROM azul/zulu-openjdk-alpine:17-jre AS build
+FROM openjdk:17-alpine AS build
 RUN apk add curl jq
 
 LABEL Marc Tönsing <marc@marc.tv>
@@ -23,7 +23,7 @@ RUN java -Dpaperclip.patchonly=true -jar /opt/minecraft/paperclip.jar; exit 0
 ########################################################
 ############## Running environment #####################
 ########################################################
-FROM azul/zulu-openjdk-alpine:17-jre AS runtime
+FROM openjdk:17-alpine AS runtime
 
 # Working directory
 WORKDIR /data
