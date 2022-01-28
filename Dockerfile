@@ -1,8 +1,8 @@
 ########################################################
 ############## We use a java base image ################
 ########################################################
-FROM openjdk:17-alpine AS build
-RUN apk add curl jq
+FROM openjdk:17-slim-buster AS build
+RUN apt-get update && apt-get -y install curl jq && rm -rf /var/lib/apt/lists/*
 
 LABEL Marc Tönsing <marc@marc.tv>
 
@@ -23,7 +23,7 @@ RUN java -Dpaperclip.patchonly=true -jar /opt/minecraft/paperclip.jar; exit 0
 ########################################################
 ############## Running environment #####################
 ########################################################
-FROM openjdk:17-alpine AS runtime
+FROM openjdk:17-slim-buster AS runtime
 
 # Working directory
 WORKDIR /data
@@ -50,11 +50,6 @@ WORKDIR /data
 
 COPY /docker-entrypoint.sh /opt/minecraft
 RUN chmod +x /opt/minecraft/docker-entrypoint.sh
-
-# Install gosu
-RUN set -eux; \
-	apk update; \
-	apk add --no-cache su-exec;
 
 # Entrypoint
 ENTRYPOINT ["/opt/minecraft/docker-entrypoint.sh"]
